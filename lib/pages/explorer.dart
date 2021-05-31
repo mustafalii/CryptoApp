@@ -172,7 +172,13 @@ class _ExplorerState extends State<Explorer>
           controller: _txsRefreshController,
           child: transactions.length == 0 && fetchingTransactions
               ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
+              : ListView.separated(
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      indent: 1,
+                      color: Colors.white,
+                    );
+                  },
                   physics: AlwaysScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: transactions.length,
