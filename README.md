@@ -36,4 +36,8 @@ I am still working on the search feature for both pages.
 ### References:
   * For models: https://www.youtube.com/watch?v=Jji05a2GV_s
 
-Note: This is still a work in progress.
+Note: This is still a work in progress. Next Steps:
+  - Enhance the UI
+  - Make the search bar an animated container with a cancel button showing next to it
+  - Add logic for the search results page
+  - Look into implementing a bitcoin wallet
