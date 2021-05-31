@@ -6,7 +6,7 @@ There are two main pages: Market data & Bitcoin explorer.
 
 Screenshots:
 <br/>
-<img src="/screenshots/ss1.png" width=300>    <img src="/screenshots/ss2.png" width=300>    <img src="/screenshots/ss3.png" width=300>
+<img src="/screenshots/ss1.png" width=200>    <img src="/screenshots/ss2.png" width=200>    <img src="/screenshots/ss3.png" width=200>
 <br/>
 
 For the market data UI, I took inspiration from coinbase pro's mobile app. The API that I used only provides information on BTC, LTC & ETH, hence only those are shown on the page.
