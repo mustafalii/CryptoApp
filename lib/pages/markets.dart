@@ -21,23 +21,26 @@ class _MarketsState extends State<Markets> with AutomaticKeepAliveClientMixin {
   final cbpUrl = Uri.parse(Utils.marketDataUrl);
   final _textEditingController = TextEditingController();
   List<Crypto> cryptos = [];
+  bool fetchingMarketData = false;
   @override
   void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      if (mounted) {
+        setState(() {
+          fetchingMarketData = true;
+        });
+      }
+      await fetchMarketData();
+      if (mounted) {
+        setState(() {
+          fetchingMarketData = false;
+        });
+      }
+    });
+
     requestTimer = Timer.periodic(Duration(seconds: 50), (timer) async {
-      http.Response httpResponse = await http.get(cbpUrl);
-      var resposne = json.decode(httpResponse.body);
-      Map<String, dynamic> tempData = resposne['data']['COINBASEPRO']['pairs'];
-      // tempData holds a map like {<crypto-fiat> : <market data info> }
-      cryptos = [];
-      tempData.entries.forEach((entry) {
-        Crypto tempCrypto = Crypto.fromJson(entry.value);
-        tempCrypto = tempCrypto.rebuild((c) => c..name = entry.key);
-        if (mounted) {
-          setState(() {
-            cryptos.add(tempCrypto);
-          });
-        }
-      });
+      await fetchMarketData();
     });
     // Map subscription = {
     //   "type": "subscribe",
@@ -45,7 +48,23 @@ class _MarketsState extends State<Markets> with AutomaticKeepAliveClientMixin {
     //   "channels": ['ticker'],
     // };
     // _channel.sink.add(jsonEncode(subscription));
-    super.initState();
+  }
+
+  Future<void> fetchMarketData() async {
+    http.Response httpResponse = await http.get(cbpUrl);
+    var resposne = json.decode(httpResponse.body);
+    Map<String, dynamic> tempData = resposne['data']['COINBASEPRO']['pairs'];
+    // tempData holds a map like {<crypto-fiat> : <market data info> }
+    cryptos = [];
+    tempData.entries.forEach((entry) {
+      Crypto tempCrypto = Crypto.fromJson(entry.value);
+      tempCrypto = tempCrypto.rebuild((c) => c..name = entry.key);
+      if (mounted) {
+        setState(() {
+          cryptos.add(tempCrypto);
+        });
+      }
+    });
   }
 
   @override
@@ -90,16 +109,22 @@ class _MarketsState extends State<Markets> with AutomaticKeepAliveClientMixin {
               SizedBox(
                 height: 10,
               ),
-              Expanded(
-                child: ListView.builder(
-                  addAutomaticKeepAlives: true,
-                  shrinkWrap: true,
-                  itemCount: cryptos.length,
-                  itemBuilder: (context, index) {
-                    return _buildCryptoListItem(cryptos[index]);
-                  },
-                ),
-              ),
+              fetchingMarketData
+                  ? Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        addAutomaticKeepAlives: true,
+                        shrinkWrap: true,
+                        itemCount: cryptos.length,
+                        itemBuilder: (context, index) {
+                          return _buildCryptoListItem(cryptos[index]);
+                        },
+                      ),
+                    ),
               // StreamBuilder(
               //   stream: _channel.stream,
               //   builder: (context, snapshot) {

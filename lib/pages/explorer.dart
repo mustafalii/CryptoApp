@@ -30,6 +30,7 @@ class _ExplorerState extends State<Explorer>
 
   @override
   void initState() {
+    super.initState();
     _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     fetchBlocks();
     _tabController.addListener(() {
@@ -45,7 +46,6 @@ class _ExplorerState extends State<Explorer>
         }
       }
     });
-    super.initState();
   }
 
   Future<void> fetchBlocks({int blockStartHeight = 0}) async {
