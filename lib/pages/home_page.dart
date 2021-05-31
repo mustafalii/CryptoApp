@@ -13,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   List<Widget> _mainScreens = [
     Markets(),
     Explorer(),
-    Text("Third page"),
+    // Text("Third page"),
   ];
 
   void _onPageChanged(int index) {
@@ -28,8 +28,8 @@ class _HomePageState extends State<HomePage> {
       currentIndex: _selectedIndex,
       items: [
         BottomNavigationBarItem(icon: Icon(Icons.bar_chart_sharp), label: ""),
-        BottomNavigationBarItem(icon: Icon(Icons.book), label: ""),
-        BottomNavigationBarItem(icon: Icon(Icons.book), label: "")
+        BottomNavigationBarItem(icon: Icon(Icons.explore), label: ""),
+        // BottomNavigationBarItem(icon: Icon(Icons.book), label: "")
       ],
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.grey,
